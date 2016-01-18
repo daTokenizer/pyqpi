@@ -56,5 +56,7 @@ class QPI(ConsumerMixin):
         try:
             methodToCall = getattr(self.module, method_name, SCRIPT_RUN_FUNCTION_NAME)
             return methodToCall(*argument_list), None
+        except AttributeError:
+            return None, "ERROR: no such function '%s' in module" % method_name
         except:
             return None, "ERROR" #TODO: do this better, be more verbose!!
