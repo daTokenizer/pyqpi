@@ -1,4 +1,4 @@
-import qpi
+from qpi import QPI
 
 class example_module(object):
     def __init__(self):
@@ -12,10 +12,16 @@ class example_module(object):
 
 
 def module_example():
-    pass
+    connection_str = 'librabbitmq://guest:guest@%s:%s//' % ("localhost", "5672")
+    consumer = QPI(example_module, "", "intake_queue", "output_queue")
+    consumer.run()
 
 def script_example():
     import script_wrapper
+    script_as_module = script_wrapper("echo")
+    connection_str = 'librabbitmq://guest:guest@%s:%s//' % ("localhost", "5672")
+    consumer = QPI(example_module, "", "intake_queue", "output_queue")
+    consumer.run()
     pass
 
 def test():

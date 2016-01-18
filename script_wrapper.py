@@ -1,13 +1,12 @@
 import subprocess
-print "start"
-subprocess.call("sleep.sh")
-print "end"
+
+RUN_FUNCTION_NAME = "run"
 
 class script_wrapper(object):
     def __init__(self, script_path):
         self.script = script_path
 
-    def call(self, args):
+    def run(self, args):
         call_item_list = [self.script]
         for arg in args:
             try:

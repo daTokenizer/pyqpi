@@ -8,6 +8,8 @@ import sys
 from time import time
 import socket
 
+from script_wrapper import RUN_FUNCTION_NAME as SCRIPT_RUN_FUNCTION_NAME
+
 from kombu import BrokerConnection, Consumer, Queue
 from kombu.mixins import ConsumerMixin
 
@@ -48,5 +50,5 @@ class QPI(ConsumerMixin):
                        compression=self.compression)
 
     def __get_func_result(self, method_name, argument_list):
-        methodToCall = getattr(self.module, method_name)
+        methodToCall = getattr(self.module, method_name, SCRIPT_RUN_FUNCTION_NAME)
         return methodToCall(*argument_list)
