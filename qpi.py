@@ -7,7 +7,6 @@
 import sys
 from time import time
 import socket
-import common.logger
 
 from kombu import BrokerConnection, Consumer, Queue
 from kombu.mixins import ConsumerMixin
@@ -17,8 +16,7 @@ CONSOLE_PRINT = False
 
 class QPI(ConsumerMixin):
 
-    def __init__(self, module, logger, rabbitmq_connection_str, intake_queue_name, output_queue_name,serializer='json', compression=None):
-        self._logger = logger
+    def __init__(self, module, rabbitmq_connection_str, intake_queue_name, output_queue_name,serializer='json', compression=None):
         self.module = module
         self.connection = BrokerConnection(rabbitmq_connection_str)
         self.qin = Queue(intake_queue_name)
