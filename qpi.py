@@ -41,14 +41,20 @@ class QPI(ConsumerMixin):
         request_id =  payload[0]
         method_name = payload[1]
         argument_list = payload[2:]
+        result, error = self.__get_func_result(method_name, argument_list)
         self.qout.put({'id' : request_id,
-                       'result' : self.__get_func_result(method_name, argument_list),
+                       'result' : result,
+                       'error' : error,
                        'hostname': socket.gethostname(),
                        'timestamp': time()
                        },
                        serializer=self.serializer,
                        compression=self.compression)
+        msg_obj.ack()
 
     def __get_func_result(self, method_name, argument_list):
-        methodToCall = getattr(self.module, method_name, SCRIPT_RUN_FUNCTION_NAME)
-        return methodToCall(*argument_list)
+        try:
+            methodToCall = getattr(self.module, method_name, SCRIPT_RUN_FUNCTION_NAME)
+            return methodToCall(*argument_list), None
+        except:
+            return None, "ERROR" #TODO: do this better, be more verbose!!
