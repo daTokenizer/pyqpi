@@ -41,12 +41,14 @@ class QPI(ConsumerMixin):
         request_id =  payload[0]
         method_name = payload[1]
         argument_list = payload[2:]
-        methodToCall = getattr(self.module, method_name)
-        result = methodToCall(*argument_list)
         self.qout.put({'id' : request_id,
-                       'result' : result,
+                       'result' : self.__get_func_result(method_name, argument_list),
                        'hostname': socket.gethostname(),
                        'timestamp': time()
                        },
                        serializer=self.serializer,
                        compression=self.compression)
+
+    def __get_func_result(self, method_name, argument_list):
+        methodToCall = getattr(self.module, method_name)
+        return methodToCall(*argument_list)
